@@ -39,12 +39,13 @@ fn unique_number_occurrences(slice: &[u32]) -> bool {
             })
             .unwrap();
 
-    let mut occurrences_list = sum_dict.values(); // Extract only the values from the hashmap to check if there are any repeated values. 
+    let occurrences_list = sum_dict.values(); // Extract only the values from the hashmap to check if there are any repeated values. 
     let mut unique_occurrences_set = HashSet::new(); // We will create a set to make sure there are no repeated values. 
 
-    let is_occurrences_count_unique = occurrences_list
+    let is_occurrences_count_unique: bool = occurrences_list 
             .into_iter()
-            .all(move |x| unique_occurrences_set.insert(x));
+            .copied()
+            .all(move |occurrence| unique_occurrences_set.insert(occurrence));  // The method all will verify if we are able to insert every occurrence into the set. If we are not, it's because we have a duplicated occurrence. 
 
     println!("Is number of occurrences unique: {}", is_occurrences_count_unique);
 
