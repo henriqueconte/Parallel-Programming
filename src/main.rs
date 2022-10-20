@@ -12,6 +12,7 @@
 use itertools::Itertools;
 use diam::prelude::*;
 use std::collections::HashMap;
+use std::collections::HashSet;
 use rayon::prelude::*;
 
 fn print_type_of<T>(_: &T) {
@@ -19,12 +20,9 @@ fn print_type_of<T>(_: &T) {
 }
 
 fn unique_number_occurrences(slice: &[u32]) -> bool {
+    let mut occurencesDicteee: HashMap<u32, usize> = HashMap::new();
 
-    let mut sum_dict: HashMap<u32, usize> = HashMap::new();
-    let mut occurencesDict: HashMap<u32, usize> = HashMap::new();
-
-    // let mut dedupped = slice.par_iter().cloned().dedup_with_count();
-    let mut dedupped = slice
+    let mut sum_dict: HashMap<u32, i32> = slice
             .into_par_iter()
             .copied()
             .fold(|| HashMap::new(), |mut map, val| {
@@ -41,12 +39,27 @@ fn unique_number_occurrences(slice: &[u32]) -> bool {
             })
             .unwrap();
 
-    for (num, occurrence) in &dedupped {
-        println!("{num}, {occurrence}");
-    }
+    let mut occurrencesList = sum_dict.values();
+    // let occurrencesList: Vec<_> = sum_dict.into_iter().collect();
     
-    println!("Type: ");
-    print_type_of(&dedupped);
+    // for (num, occurrence) in &sum_dict {
+    //     println!("{num}, {occurrence}");
+    // }
+
+    // for element in occurrencesList.into_iter() {
+    //     println!("{element},");
+    // }
+
+    let mut uniq = HashSet::new();
+    // let mid = occurrencesList.len() / 2;
+    // let (leftSlice, rightSlice) = occurrencesList.split_at(mid);
+
+    // println!("Left slice: {:?}, and then right slice: {:?}", leftSlice, rightSlice);
+
+    let occurencesDict = occurrencesList.into_iter().all(move |x| uniq.insert(x));
+    println!("{}", occurencesDict);
+
+    // println!("Type: ");
 
     // Use map to create (value, 1)
     // Reduce by key to sum all values
