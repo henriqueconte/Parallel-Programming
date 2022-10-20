@@ -20,67 +20,43 @@ fn print_type_of<T>(_: &T) {
 }
 
 fn unique_number_occurrences(slice: &[u32]) -> bool {
-    let mut occurencesDicteee: HashMap<u32, usize> = HashMap::new();
 
-    let mut sum_dict: HashMap<u32, i32> = slice
+    // Creates a hashmap from slice, counting the number of occurrences of each value.
+    // The key is the value, and the value is the number of occurrences.
+    // Example: [1, 2, 3, 1] -> (1, 2), (2, 1), (3, 1)
+    let sum_dict: HashMap<u32, i32> = slice
             .into_par_iter()
             .copied()
-            .fold(|| HashMap::new(), |mut map, val| {
-                map.entry(val)
-                    .and_modify(|frq|*frq+=1)
-                    .or_insert(1);
-                map
+            .fold(|| HashMap::new(), |mut sub_map, val| {   // Parallel fold will create multiple sub hashmaps with the value and its occurrences.
+                sub_map.entry(val).and_modify(|occurrence| *occurrence += 1).or_insert(1);  // Adds 1 if key exists. Inserts 1 if key doesn't exist. 
+                return sub_map
             })
-            .reduce_with(|mut m1, m2| {
-                for (k, v) in m2 {
-                    *m1.entry(k).or_default() += v;
+            .reduce_with(|mut map1, map2| { // Since fold created multiple sub hashmaps, we reduce them to sum all occurrences of each value.
+                for (key, occurrence) in map2 {
+                    *map1.entry(key).or_default() += occurrence;
                 }
-                m1
+                return map1
             })
             .unwrap();
 
-    let mut occurrencesList = sum_dict.values();
-    // let occurrencesList: Vec<_> = sum_dict.into_iter().collect();
-    
-    // for (num, occurrence) in &sum_dict {
-    //     println!("{num}, {occurrence}");
-    // }
+    let mut occurrences_list = sum_dict.values(); // Extract only the values from the hashmap to check if there are any repeated values. 
+    let mut unique_occurrences_set = HashSet::new(); // We will create a set to make sure there are no repeated values. 
 
-    // for element in occurrencesList.into_iter() {
-    //     println!("{element},");
-    // }
+    let is_occurrences_count_unique = occurrences_list
+            .into_iter()
+            .all(move |x| unique_occurrences_set.insert(x));
 
-    let mut uniq = HashSet::new();
-    // let mid = occurrencesList.len() / 2;
-    // let (leftSlice, rightSlice) = occurrencesList.split_at(mid);
+    println!("Is number of occurrences unique: {}", is_occurrences_count_unique);
 
-    // println!("Left slice: {:?}, and then right slice: {:?}", leftSlice, rightSlice);
-
-    let occurencesDict = occurrencesList.into_iter().all(move |x| uniq.insert(x));
-    println!("{}", occurencesDict);
-
-    // println!("Type: ");
-
-    // Use map to create (value, 1)
-    // Reduce by key to sum all values
-    // Sort tuples
-    // Compare if current value == next value -> if it is, return False
-    
-    // Create array with size n with empty values (into_par_iter)
-    // for el
-
-    // Use dictionaries like Python
-
-    return true;
+    return is_occurrences_count_unique;
 }
 
 fn main() {
-
     let a1 = [1,2,2,1,1,3];
     let a2 = [1,2];
     let a3 = [3,0,1,3,1,1,1,3,10,0];
 
     assert!(unique_number_occurrences(&a1));
-    // assert!(!unique_number_occurrences(&a2));
-    // assert!(unique_number_occurrences(&a3));
+    assert!(!unique_number_occurrences(&a2));
+    assert!(unique_number_occurrences(&a3));
 }
