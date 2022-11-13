@@ -8,14 +8,18 @@ class Solution:
         sumDict = {}
         occurencesDict = {}
 
+        # Creates dictionary with each value and their amount of occurrences.
         for element in arr:
             if str(element) in sumDict:
                 sumDict[str(element)] += 1
             else:
                 sumDict[str(element)] = 1
 
+        # Gets only the values from the dictionary.
         occurrencesCountList = list(sumDict.values())
 
+        # Pushes each amount of occurrences into a new dictionary. If the dictionary already
+        # has the key, it stops the execution and returns false, since it has a duplicated occurrence. 
         for element in occurrencesCountList:
             if str(element) in occurencesDict:
                 return False

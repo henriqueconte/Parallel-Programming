@@ -15,6 +15,8 @@ use std::collections::HashMap;
 use std::collections::HashSet;
 use rayon::prelude::*;
 
+const N: usize = 100_000_000;
+
 fn print_type_of<T>(_: &T) {
     println!("{}", std::any::type_name::<T>())
 }
@@ -52,7 +54,7 @@ fn unique_number_occurrences(slice: &[u32]) -> bool {
     println!("Size of occurrences list: {}", occurrences_len);
     println!("Size of unique occurrences: {}", unique_occurrences_count);
 
-    // If the amount of unique occurrences is the same as the amount of itens in the original list, then we have a unique number of occurrences!
+    // If the amount of unique occurrences is the same as the amount of itens in the original list, then we have a unique number of occurrences.
     let are_occurrences_unique: bool = occurrences_len == unique_occurrences_count;
 
     println!("Is number of occurrences unique: {}", are_occurrences_unique);
@@ -61,11 +63,18 @@ fn unique_number_occurrences(slice: &[u32]) -> bool {
 }
 
 fn main() {
-    let a1 = [1,2,2,1,1,3];
-    let a2 = [1,2];
-    let a3 = [3,0,1,3,1,1,1,3,10,0];
+    let mut v: Vec<u32> = std::iter::repeat_with(rand::random).take(N).collect();
+    let time = std::time::Instant::now();
 
-    assert!(unique_number_occurrences(&a1));
-    assert!(!unique_number_occurrences(&a2));
-    assert!(unique_number_occurrences(&a3));
+    unique_number_occurrences(&v);
+    println!("Time to run in parallel: {:?}", time.elapsed())
+
+
+    // METHODS TO TEST CODE CORRECTNESS.
+    // let a1 = [1,2,2,1,1,3];
+    // let a2 = [1,2];
+    // let a3 = [3,0,1,3,1,1,1,3,10,0];
+    // assert!(unique_number_occurrences(&a1));
+    // assert!(!unique_number_occurrences(&a2));
+    // assert!(unique_number_occurrences(&a3));
 }
