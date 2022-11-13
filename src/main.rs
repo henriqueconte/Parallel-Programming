@@ -37,11 +37,13 @@ fn unique_number_occurrences(slice: &[u32]) -> bool {
                 }
                 return map1
             })
-            .unwrap();
+            .unwrap(); // Unwraps optional value. 
 
     let occurrences_list = sum_dict.values(); // Extract only the values from the hashmap to check if there are any repeated values. 
     let mut unique_occurrences_set = HashSet::new(); // We will create a set to make sure there are no repeated values. 
 
+    // I need to improve this. A possibility would be use try_fold to split the problem and return something before.
+    
     let is_occurrences_count_unique: bool = occurrences_list 
             .into_iter()
             .copied()
@@ -54,10 +56,10 @@ fn unique_number_occurrences(slice: &[u32]) -> bool {
 
 fn main() {
     let a1 = [1,2,2,1,1,3];
-    let a2 = [1,2];
-    let a3 = [3,0,1,3,1,1,1,3,10,0];
+    // let a2 = [1,2];
+    // let a3 = [3,0,1,3,1,1,1,3,10,0];
 
     assert!(unique_number_occurrences(&a1));
-    assert!(!unique_number_occurrences(&a2));
-    assert!(unique_number_occurrences(&a3));
+    // assert!(!unique_number_occurrences(&a2));
+    // assert!(unique_number_occurrences(&a3));
 }
