@@ -40,17 +40,10 @@ fn unique_number_occurrences(slice: &[u32]) -> bool {
             .unwrap(); // Unwraps optional value. 
 
     let occurrences_list = sum_dict.values(); // Extract only the values from the hashmap to check if there are any repeated values. 
-    // let mut unique_occurrences_set = HashSet::new(); // We will create a set to make sure there are no repeated values. 
-
-    // I need to improve this. A possibility would be use try_fold to split the problem and return something before.
-    // let is_occurrences_count_unique: bool = occurrences_list 
-    //         .into_iter()
-    //         .copied()
-    //         .all(move |occurrence| unique_occurrences_set.insert(occurrence));  
-    // The method all will verify if we are able to insert every occurrence into the set. If we are not, it's because we have a duplicated occurrence. 
 
     let occurrences_len: usize = occurrences_list.len();
     
+    // Gets the amount of unique occurrences
     let unique_occurrences_count: usize = occurrences_list
             .into_iter()
             .unique()
@@ -59,6 +52,7 @@ fn unique_number_occurrences(slice: &[u32]) -> bool {
     println!("Size of occurrences list: {}", occurrences_len);
     println!("Size of unique occurrences: {}", unique_occurrences_count);
 
+    // If the amount of unique occurrences is the same as the amount of itens in the original list, then we have a unique number of occurrences!
     let are_occurrences_unique: bool = occurrences_len == unique_occurrences_count;
 
     println!("Is number of occurrences unique: {}", are_occurrences_unique);
