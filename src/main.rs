@@ -40,26 +40,38 @@ fn unique_number_occurrences(slice: &[u32]) -> bool {
             .unwrap(); // Unwraps optional value. 
 
     let occurrences_list = sum_dict.values(); // Extract only the values from the hashmap to check if there are any repeated values. 
-    let mut unique_occurrences_set = HashSet::new(); // We will create a set to make sure there are no repeated values. 
+    // let mut unique_occurrences_set = HashSet::new(); // We will create a set to make sure there are no repeated values. 
 
     // I need to improve this. A possibility would be use try_fold to split the problem and return something before.
+    // let is_occurrences_count_unique: bool = occurrences_list 
+    //         .into_iter()
+    //         .copied()
+    //         .all(move |occurrence| unique_occurrences_set.insert(occurrence));  
+    // The method all will verify if we are able to insert every occurrence into the set. If we are not, it's because we have a duplicated occurrence. 
+
+    let occurrences_len: usize = occurrences_list.len();
     
-    let is_occurrences_count_unique: bool = occurrences_list 
+    let unique_occurrences_count: usize = occurrences_list
             .into_iter()
-            .copied()
-            .all(move |occurrence| unique_occurrences_set.insert(occurrence));  // The method all will verify if we are able to insert every occurrence into the set. If we are not, it's because we have a duplicated occurrence. 
+            .unique()
+            .count();
 
-    println!("Is number of occurrences unique: {}", is_occurrences_count_unique);
+    println!("Size of occurrences list: {}", occurrences_len);
+    println!("Size of unique occurrences: {}", unique_occurrences_count);
 
-    return is_occurrences_count_unique;
+    let are_occurrences_unique: bool = occurrences_len == unique_occurrences_count;
+
+    println!("Is number of occurrences unique: {}", are_occurrences_unique);
+
+    return are_occurrences_unique;
 }
 
 fn main() {
     let a1 = [1,2,2,1,1,3];
-    // let a2 = [1,2];
-    // let a3 = [3,0,1,3,1,1,1,3,10,0];
+    let a2 = [1,2];
+    let a3 = [3,0,1,3,1,1,1,3,10,0];
 
     assert!(unique_number_occurrences(&a1));
-    // assert!(!unique_number_occurrences(&a2));
-    // assert!(unique_number_occurrences(&a3));
+    assert!(!unique_number_occurrences(&a2));
+    assert!(unique_number_occurrences(&a3));
 }
